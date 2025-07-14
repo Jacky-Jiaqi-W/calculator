@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Relief:wght@400;700&display=swap');
+
+body {
+    margin: 0px;
+    box-sizing: border-box;
+    height: 100vh;
+    font-family: 'Comic Relief', 'Comic Sans MS', 'Segoe UI', 'Arial', sans-serif;
+    color: aliceblue;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: rgb(65, 60, 60);
+}
+
+ul {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+    display: flex;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+a {
+    font-size: 22px;
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.container {
+    flex-grow: 1;
+}
+
+.footer {
+    padding: 10px 30px;
+    text-align: center;
+    background-color: rgb(65, 60, 60);
+}
