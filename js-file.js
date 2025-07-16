@@ -39,21 +39,21 @@ function divideByZero(arr) {
     return (arr[1] === "/") && (arr[2] === "0");
 }
 
-function handlePressedNumbersBtn(pressedOperatorBtn) {
+function handlePressedNumbersBtn(numberStr) {
     if (resultDisplay.textContent !== "") {
         handlePressedClearBtn();
     }
-    displayContent += pressedOperatorBtn.textContent;
+    displayContent += numberStr;
     populateDisplay(equationDisplay, displayContent);
 }
 
-function handlePressedOperatorsBtn(pressedOperatorBtn) {
+function handlePressedOperatorsBtn(operator) {
     if (displayContent !== "") {
         let arr = displayContent.trimEnd().split(" ");
         if (arr.length === 1) {
-            displayContent = `${displayContent} ${pressedOperatorBtn.textContent} `;
+            displayContent = `${displayContent} ${operator} `;
         } else if (arr.length === 2) {
-            arr[1] = pressedOperatorBtn.textContent;
+            arr[1] = operator;
             displayContent = arr.join(" ") + " ";;
         } else if (arr.length === 3) {
             if (divideByZero(arr)) {
@@ -63,7 +63,7 @@ function handlePressedOperatorsBtn(pressedOperatorBtn) {
             }
             arr.length = 0;
             arr[0] = evaluate();
-            arr[1] = pressedOperatorBtn.textContent;
+            arr[1] = operator;
             displayContent = arr.join(" ") + " ";
             resultDisplay.textContent = "";
         }
@@ -111,12 +111,10 @@ function handlePressedDecimalBtn() {
 
 function handlePressedDeleteBtn() {
     if (displayContent !== "") {
-        let arr = displayContent.trimEnd().split(" ");
-        arr.pop();
-        if (arr.length === 2) {
-            displayContent = arr.join(" ") + " ";
+        if (displayContent.endsWith(" ")) {
+            displayContent = displayContent.slice(0, displayContent.length - 3);
         } else {
-            displayContent = arr.join(" ");
+            displayContent = displayContent.slice(0, displayContent.length - 1);
         }
         populateDisplay(equationDisplay, displayContent);
     }
@@ -125,10 +123,10 @@ function handlePressedDeleteBtn() {
 function handlePressedBtn(pressedBtn) {
     switch (pressedBtn.className) {
         case "number":
-            handlePressedNumbersBtn(pressedBtn);
+            handlePressedNumbersBtn(pressedBtn.textContent);
             break;
         case "operators":
-            handlePressedOperatorsBtn(pressedBtn);
+            handlePressedOperatorsBtn(pressedBtn.textContent);
             break;
         case "operators eval":
             handlePressedEvalBtn();
@@ -145,6 +143,39 @@ function handlePressedBtn(pressedBtn) {
     }
 }
 
+function handleKeyboard(key) {
+    // Numbers (0-9)
+    if (!isNaN(key) && key !== " ") {
+        handlePressedNumbersBtn(key);
+        return;
+    }
+    // Operators
+    if (["+", "-", "*", "/"].includes(key)) {
+        handlePressedOperatorsBtn(key);
+        return;
+    }
+    if (key === ".") {
+        handlePressedDecimalBtn();
+        return;
+    }
+    // Enter or = → evaluate
+    if (key === "Enter" || key === "=") {
+        // e.preventDefault();
+        handlePressedEvalBtn();
+        return;
+    }
+    // Backspace → delete
+    if (key === "Backspace") {
+        handlePressedDeleteBtn();
+        return;
+    }
+    // Escape → clear
+    if (key === "Escape") {
+        handlePressedClearBtn();
+        return;
+    }
+}
+
 const equationDisplay = document.querySelector(".equation");
 const resultDisplay = document.querySelector(".result");
 
@@ -156,6 +187,11 @@ const keypad = document.querySelector(".keypad");
 
 keypad.addEventListener("click", e => {
     handlePressedBtn(e.target);
+});
+
+document.addEventListener("keydown", e => {
+    const key = e.key;
+    handleKeyboard(key);
 });
 
 let firstNumber = null;
