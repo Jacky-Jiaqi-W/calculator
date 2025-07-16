@@ -61,7 +61,7 @@ a {
 
 .equation,
 .result {
-    flex-grow: 1;
+    height: 50px;
     display: flex;
     align-items: center;
     padding: 0px 10px;
