@@ -11,7 +11,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    return Math.round(a / b * 100) / 100;
+    return a / b;
 }
 
 function operate(operator, firstNum, secondNum) {
@@ -32,7 +32,7 @@ function evaluate() {
     firstNumber = +arr[0];
     operator = arr[1];
     secondNumber = +arr[2];
-    return operate(operator, firstNumber, secondNumber);
+    return Math.round(operate(operator, firstNumber, secondNumber) * 100) / 100;
 }
 
 function divideByZero(arr) {
@@ -92,6 +92,36 @@ function handlePressedClearBtn() {
     populateDisplay(resultDisplay, "");
 }
 
+function handlePressedDecimalBtn() {
+    let arr = displayContent.trimEnd().split(" ");
+    switch (arr.length) {
+        case 1:
+            if (arr[0] !== "" && !arr[0].includes(".")) {
+                displayContent += ".";
+            }
+            break;
+        case 3:
+            if (!arr[2].includes(".")) {
+                displayContent += ".";
+            }
+            break;
+    }
+    populateDisplay(equationDisplay, displayContent);
+}
+
+function handlePressedDeleteBtn() {
+    if (displayContent !== "") {
+        let arr = displayContent.trimEnd().split(" ");
+        arr.pop();
+        if (arr.length === 2) {
+            displayContent = arr.join(" ") + " ";
+        } else {
+            displayContent = arr.join(" ");
+        }
+        populateDisplay(equationDisplay, displayContent);
+    }
+}
+
 function handlePressedBtn(pressedBtn) {
     switch (pressedBtn.className) {
         case "number":
@@ -105,6 +135,12 @@ function handlePressedBtn(pressedBtn) {
             break;
         case "ac":
             handlePressedClearBtn();
+            break;
+        case "decimal":
+            handlePressedDecimalBtn();
+            break;
+        case "del":
+            handlePressedDeleteBtn();
             break;
     }
 }
